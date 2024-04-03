@@ -1,0 +1,66 @@
+# OSX
+#
+/authent/.DS_Store
+
+# Xcode
+#
+/authent/build/
+/authent/*.pbxuser
+/authent/!default.pbxuser
+/authent/*.mode1v3
+/authent/!default.mode1v3
+/authent/*.mode2v3
+/authent/!default.mode2v3
+/authent/*.perspectivev3
+/authent/!default.perspectivev3
+/authent/xcuserdata
+/authent/*.xccheckout
+/authent/*.moved-aside
+/authent/DerivedData
+/authent/*.hmap
+/authent/*.ipa
+/authent/*.xcuserstate
+/authent/ios/.xcode.env.local
+
+# Android/IntelliJ
+#
+/authent/build/
+/authent/.idea
+/authent/.gradle
+/authent/local.properties
+/authent/*.iml
+/authent/*.hprof
+/authent/.cxx/
+/authent/*.keystore
+/authent/!debug.keystore
+
+# node.js
+#
+/authent/node_modules/
+/authent/npm-debug.log
+/authent/yarn-error.log
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+/authent/**/fastlane/report.xml
+/authent/**/fastlane/Preview.html
+/authent/**/fastlane/screenshots
+/authent/**/fastlane/test_output
+
+# Bundle artifact
+/authent/*.jsbundle
+
+# Ruby / CocoaPods
+/authent/ios/Pods/
+/authent/vendor/bundle/
+
+# Temporary files created by Metro to check the health of the file watcher
+/authent/.metro-health-check*
+
+# testing
+/authent/coverage
