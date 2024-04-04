@@ -1,27 +1,26 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import Main from '../screens/Main'
 import Home from '../screens/Home'
+import History from '../screens/History'
 
 export type AppStackParamList = {
     Home: undefined;
+    History: undefined;
 }
 
-const Stack = createNativeStackNavigator<AppStackParamList>()
+const Tab = createBottomTabNavigator<AppStackParamList>()
+
+// const Stack = createNativeStackNavigator<AppStackParamList>()
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator 
-        screenOptions={{
-            headerTitleAlign:'center',
-            headerBackTitleVisible: false,
-        }}
-    >
-      <Stack.Screen name='Home' component={Home}/>
-    </Stack.Navigator>
+   <Tab.Navigator>
+     <Tab.Screen name='Home' component={Home}/>
+     <Tab.Screen name='History' component={History}/>
+    </Tab.Navigator>
   )
 }
 

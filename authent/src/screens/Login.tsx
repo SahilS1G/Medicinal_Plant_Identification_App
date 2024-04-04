@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Pressable, Platform } from 'react-native'
-import React, {useContext, useState} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import { FAB } from '@rneui/themed'
 
 //snackbar
@@ -9,15 +9,12 @@ import Snackbar from 'react-native-snackbar'
 import { AppwriteContext } from '../appwrite/appwriteContext'
 
 //navigation
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-
+import { StackScreenProps } from '@react-navigation/stack'
 import { AuthStack, AuthStackParamList } from '../routes/AuthStack'
-
 import { AppStack, AppStackParamList } from '../routes/AppStack'
 
-type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, 'Login'>
+type LoginScreenProps = StackScreenProps<AuthStackParamList, 'Login'>
 
-type HomeScreenProps = NativeStackScreenProps<AppStackParamList, 'Home'>
 
 
 const Login = ({navigation} : LoginScreenProps) => {
@@ -26,6 +23,12 @@ const Login = ({navigation} : LoginScreenProps) => {
   const [error, setError] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+
+  useEffect(() => {
+    console.log('isLoggedIn:', isLoggedIn);
+    // setIsLoggedIn(true);
+    console.log('isLoggedIn:', isLoggedIn);
+  }, [appwrite]);
 
   const handleLogin = () =>{
     if ( email.length < 1 || password.length < 1) {
@@ -37,14 +40,17 @@ const Login = ({navigation} : LoginScreenProps) => {
       }
       appwrite.login(user)
         .then((response) => {
+          console.log('Login response:', response); 
           if (response) {
             setIsLoggedIn(true)
+            console.log('isLoggedIn set to true'); 
             Snackbar.show({
               text:"Login successful",
               duration: Snackbar.LENGTH_SHORT
             })
             
           }
+          setIsLoggedIn(true)
           console.log(isLoggedIn)
         })
       .catch(e => {
