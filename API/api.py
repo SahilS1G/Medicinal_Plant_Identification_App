@@ -5,6 +5,20 @@ from io import BytesIO
 from PIL import Image
 from tensorflow.keras.models import load_model
 import tensorflow_hub as hub
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ["API_KEY"])
+model = genai.GenerativeModel('gemini-pro')
+
+def get_details(class_name,ismedicinal):
+    if ismedicinal== True:
+        message = 'Give me five line information, highlighting its uses and significance, about this medicinal plant: ' + str(class_name)
+        details = model.generate_content(message)
+        return details.candidates[0].content.parts[0].text
+    else:
+        return None
+
 
 def load_custom_model(model_path):
     return load_model(
@@ -12,7 +26,7 @@ def load_custom_model(model_path):
         custom_objects={'KerasLayer': hub.KerasLayer}
     )
 
-model_ld = load_custom_model('./model/mpia_fmod.h5')
+model_ld = load_custom_model('../model/mpia_fmod.h5')
 
 app = FastAPI()
 
@@ -97,8 +111,10 @@ class_names = ['Aloevera',
  'kamakasturi',
  'kepala']
 
-def image_ndarray(data)-> np.ndarray:
-    np_img = np.array(Image.open(BytesIO(data)))
+def image_ndarray(data):
+    image = Image.open(BytesIO(data))
+    image = image.resize((224,224))
+    np_img = np.array(image)
     return np_img
 
 @app.get("/ping")
@@ -108,15 +124,17 @@ async def ping():
 @app.post("/predict/")
 async def predict(file: UploadFile):
     image = image_ndarray(await file.read())
-    img_bth =  np.expand_dims(np_img,0)
+    img_bth =  np.expand_dims(image,0)
     predictions = model_ld.predict(img_bth)
     predict_class = class_names[np.argmax(predictions[0])]
     confidence = np.max(predictions[0])
     is_medicinal = True if confidence > 0.5 else False
+    details = get_details(predict_class,is_medicinal)
     return {
             'class': predict_class,
             'confidence':float(confidence),
-            'ismedicinal':is_medicinal
+            'ismedicinal':is_medicinal,
+            'details':details
             }
 
 if __name__ == "__main__":
