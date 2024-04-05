@@ -5,10 +5,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 // import Main from '../screens/Main'
 import Home from '../screens/Home'
 import History from '../screens/History'
+import Profile from '../screens/Profile'
 
 export type AppStackParamList = {
     Home: undefined;
     History: undefined;
+    Profile: undefined;
+
 }
 
 const Tab = createBottomTabNavigator<AppStackParamList>()
@@ -20,6 +23,7 @@ export const AppStack = () => {
    <Tab.Navigator>
      <Tab.Screen name='Home' component={Home}/>
      <Tab.Screen name='History' component={History}/>
+      <Tab.Screen name='Profile' component={Profile}/>
     </Tab.Navigator>
   )
 }
