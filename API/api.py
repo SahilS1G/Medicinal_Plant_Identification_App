@@ -3,7 +3,7 @@ import uvicorn
 import numpy as np
 from io import BytesIO
 from PIL import Image
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 import tensorflow_hub as hub
 import google.generativeai as genai
 import os
@@ -19,14 +19,7 @@ def get_details(class_name,ismedicinal):
     else:
         return None
 
-
-def load_custom_model(model_path):
-    return load_model(
-        model_path,
-        custom_objects={'KerasLayer': hub.KerasLayer}
-    )
-
-model_ld = load_custom_model('../model/mpia_fmod.h5')
+model_ld = tf.keras.layers.TFSMLayer('../model/mpim_final', call_endpoint='serving_default')
 
 app = FastAPI()
 
@@ -125,9 +118,10 @@ async def ping():
 async def predict(file: UploadFile):
     image = image_ndarray(await file.read())
     img_bth =  np.expand_dims(image,0)
-    predictions = model_ld.predict(img_bth)
-    predict_class = class_names[np.argmax(predictions[0])]
-    confidence = np.max(predictions[0])
+    predictions = model_ld(img_bth)
+    print(predictions["dense"])
+    confidence = np.max(predictions["dense"])
+    predict_class = class_names[np.argmax(predictions["dense"])]
     is_medicinal = True if confidence > 0.5 else False
     details = get_details(predict_class,is_medicinal)
     return {
